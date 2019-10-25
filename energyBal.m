@@ -3,7 +3,7 @@ function dTdV = energyBal(Htot,rates,Tlast,molFracs,Cp,dV)
 term1 = 0;
 
 for i = 1:length(rates)
-    term1 = term1 + rates(i)*Htot(i); 
+    term1 = term1 + rates(i)*Htot(i);
 end
 
 %Params
