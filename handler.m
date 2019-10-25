@@ -2,6 +2,7 @@ function outvar = handler(v, y, phi, MW, Htot, Cp, dV)
 
 %unpacking y
 %disp y(1)
+%{
 nflowc2h4 = y(1);
 nflowhcl = y(2);
 nflowo2 = y(3);
@@ -10,6 +11,7 @@ nflowco2 = y(5);
 nflowcl2 = y(6);
 nflowc2h4cl2 = y(7);
 nflowh2o = y(8);
+%}
 
 T = y(9);
 P_t = y(10);
@@ -40,6 +42,7 @@ R = 8.3144621;
 %Calculate rate constant for each reaction
 a1 = 10^4.2; a2 = 10^13.23; a3 = 10^6.78;  % a's are the pre-exponential factors from the Lakshmanan paper.
 
+%a2 is very large, causes a very stiff system (very fast rate expression
 % E's are acivation energies in units of kJ from the Lakshmanan paper.
 E1 = -40.1; E2 = -128.08; E3 = -112;
 
