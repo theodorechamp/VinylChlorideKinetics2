@@ -1,7 +1,7 @@
 function dPdV = ergun(T,pp, MW, nflow, phi)
 R = 8.3144621; %L kPa K?1 mol?1 
 rho = [0,0,0,0,0,0,0,0];
-for i = 1:length(nflow)
+for i = 1:length(pp)
     rho(i) = pp(i)*MW(i)/(T*R);
 end
 
