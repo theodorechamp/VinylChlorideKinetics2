@@ -1,16 +1,19 @@
-function null = plotdata(P, T, TC, v, F1, F2, F3, F4, F5, F6, F7, F8)
+function null = plotdata(v, y, conv)
 % Figure 1 -- flowrate vs reactor vol
 figure(1)
-plot(v,F1,'y-',v,F2,'m-',v,F3,'c-',v,F4,'r-',v,F5,'g-',v,F6,'b-',v,F7,'k-',v,F8,'#fcba03-') % might not work, check #color
+f1 = y(:,1);
+
+plot(v,y(:,1),v,y(:,2),v,y(:,3),v,y(:,4),v,y(:,5),'g-',v,y(:,6),v,y(:,7),v,y(:,8)) % might not work, check #color
 grid
 xlabel('Reactor Volume - L')
 ylabel('Molar Flowrate - mol/hr')
 title('Molar Flowrate vs. Reactor Volume')
-legend('F1','F2','F3','F4','F5','F6','F7','F8','Location','northeastoutside')
+legend('C_2H_4','HCl','O_2','C_2H_3Cl_3','CO_2','Cl_2','C_2H_4Cl_2','H2O','Location','northeastoutside')
+
 
 % Figure 2 -- reactor T vs reactor vol
 figure(2)
-plot(v,T,'k-')
+plot(v,y(:,9),'k-')
 grid
 xlabel('Reactor Volume - L')
 ylabel('Reactor Temperature - K')
@@ -18,7 +21,7 @@ title('Reactor Temperature vs. Reactor Volume')
 
 % Figure 3 -- coolant T vs reactor vol
 figure(3)
-plot(v,TC,'k-')
+plot(v,y(:,11),'k-')
 grid
 xlabel('Reactor Volume - L')
 ylabel('Coolant Temperature - K')
@@ -26,9 +29,17 @@ title('Coolant Temperature vs. Reactor Volume')
 
 % Figure 4 -- reactor P vs reactor vol
 figure(4)
-plot(v,P,'k-')
+plot(v,y(:,10),'k-')
 grid
 xlabel('Reactor Volume - L')
 ylabel('Reactor Pressure - kPa')
 title('Reactor Pressure vs. Reactor Volume')
+
+figure(5)
+plot(v,conv,'k-')
+grid
+xlabel('Reactor Volume - L')
+ylabel('Conversion (% of C_2H_4)')
+title('Conversion profile')
+
 end
