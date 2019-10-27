@@ -14,22 +14,27 @@
 %%%%%%%%%%%%%%
 % Parameters %
 %%%%%%%%%%%%%%
-Tin = 533.579; % not the official value, will be adjusted to achieve outlet of 533 
+% Variables
+Tin = 510; % not the official value, will be adjusted to achieve outlet of 533k 
 Pin = 1000; %kPa
 Tcin = 303;
+D = .015; %m
+Lr = 10; % m
+nflowinit = [.0003,.00209,.00052,0,0,0.000001,0,0]; % Same indices as pp
+
+% Set
+Vr = D^2*pi/4*Lr; % m^3
+numElements = 200;
+MW = [0.02805, 0.03646, 0.01600, 0.1334, 0.04401, 0.0709, 0.09896, 0.01802]; %kg/mol
 Htot = [136.77, 119.87, 1410.08, -89.92]; %kJ/mol
 Cp = [0.0538, 0.0292, 0.0304, 0.1050, 0.0418, 0.0351, 0.0937, 0.0345]; % averaged over temp range, kJ/mol K
-D = .08; %m
-Lr = 8; % m
-Vr = D^2*pi/4*Lr; % m^3
-nflowinit = [.00065,.0019,.000665,0,0,0.000001,0,0]; % Same indices as pp
 phi = .4;
-MW = [0.02805, 0.03646, 0.01600, 0.1334, 0.04401, 0.0709, 0.09896, 0.01802]; %kg/mol
-numElements = 200;
+
 
 %%%%%%%%%
 % Logic %
 %%%%%%%%%
+disp(Vr)
 vspan = linspace(0, Vr, numElements);
 
 %Loading Dependent variables
@@ -48,7 +53,7 @@ for i = 1:numElements
     conv(i) = (1-ysoln(i,1)/ysoln(1,1));
 end
 disp("Final Conversion: "+ num2str(conv(numElements)))
-mflowprod = ysoln(200,7)*MW(7);
+mflowprod = ysoln(numElements,7)*MW(7);
 disp("Kg flow product, 1 tube: " + num2str(mflowprod))
 disp("N tubes: " + num2str(15.85/mflowprod));
 plotdata(v, ysoln, conv);
