@@ -15,12 +15,12 @@
 % Parameters %
 %%%%%%%%%%%%%%
 % Variables
-Tin = 509; % not the official value, will be adjusted to achieve outlet of 533k 
+Tin = 471; % not the official value, will be adjusted to achieve outlet of 533k 
 Pin = 1000; %kPa
 Tcin = 303;
 D = .0245; %m
-Lr = 15; % m
-nflowinit = [.000009 .00041 .00005 0 0 .0000001 0 0]; % Same indices as pp
+Lr = 12; % m
+nflowinit = [.0000089 .00040 .00005 0 0 .000001 0 0]; % Same indices as pp
 ntotthang = 0;
 for i = 1:length(nflowinit)
     ntotthang = ntotthang + nflowinit(i);
@@ -62,6 +62,7 @@ disp("Final Conversion: "+ num2str(conv(numElements)))
 mflowprod = ysoln(numElements,7)*MW(7);
 disp("Kg flow product, 1 tube: " + num2str(mflowprod))
 disp("N tubes: " + num2str(15.85/mflowprod));
+disp(max(ysoln(:,9)))
 plotdata(v, ysoln, conv);
 
 

@@ -109,7 +109,7 @@ Ac = D^2 / 4 * pi; %m2
 mu = 2.11*10^-5; %From Hysys
 outvar(10) = - 150/Ac*((1-phi)*mu/(Dp*G0)+(7/4))*((1-phi)/phi^3)*(G0^2/(rho*Dp))/1000; %kPa/m3 
 
-Fc = .01; %kg/s
+Fc = .00315; %kg/s
 As = D * pi * Lr;
 Do = D + 2*.0036;
 Cpc = (Tc - 273) * .0029 + 1.5041 + 273; %kJ/kg K
