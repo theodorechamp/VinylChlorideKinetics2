@@ -102,14 +102,14 @@ for i = 1:length(MW)
     mflowTot = mflowTot + nflow(i)*MW(i);
 end
 
-D = 0.0254; %m
+%m
 Dp = D/8; %Using heuristic Weimer gave in class on 10/10/19 that particle diameter should be 1/8 of tube diameter
 G0 = mflowTot/(pi*D^2/4); %kg/m^2 s
 Ac = D^2 / 4 * pi; %m2
 mu = 2.11*10^-5; %From Hysys
 outvar(10) = - 150/Ac*((1-phi)*mu/(Dp*G0)+(7/4))*((1-phi)/phi^3)*(G0^2/(rho*Dp))/1000; %kPa/m3 
 
-Fc = .02; %kg/s
+Fc = .01; %kg/s
 As = D * pi * Lr;
 Do = D + 2*.0036;
 Cpc = (Tc - 273) * .0029 + 1.5041 + 273; %kJ/kg K

@@ -15,12 +15,18 @@
 % Parameters %
 %%%%%%%%%%%%%%
 % Variables
-Tin = 510; % not the official value, will be adjusted to achieve outlet of 533k 
+Tin = 509; % not the official value, will be adjusted to achieve outlet of 533k 
 Pin = 1000; %kPa
 Tcin = 303;
-D = .015; %m
-Lr = 10; % m
-nflowinit = [.0003,.00209,.00052,0,0,0.000001,0,0]; % Same indices as pp
+D = .0245; %m
+Lr = 15; % m
+nflowinit = [.000009 .00041 .00005 0 0 .0000001 0 0]; % Same indices as pp
+ntotthang = 0;
+for i = 1:length(nflowinit)
+    ntotthang = ntotthang + nflowinit(i);
+end
+molfracthang = nflowinit ./ntotthang;
+disp(molfracthang)
 
 % Set
 Vr = D^2*pi/4*Lr; % m^3
