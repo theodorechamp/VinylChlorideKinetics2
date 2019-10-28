@@ -26,7 +26,7 @@ for i = 1:length(nflowinit)
     ntotthang = ntotthang + nflowinit(i);
 end
 molfracthang = nflowinit ./ntotthang;
-%disp(molfracthang)
+disp(molfracthang)
 
 % Set
 Vr = D^2*pi/4*Lr; % m^3
@@ -62,8 +62,8 @@ disp("Final Conversion: "+ num2str(conv(numElements)))
 mflowprod = ysoln(numElements,7)*MW(7);
 disp("Kg flow product, 1 tube: " + num2str(mflowprod))
 disp("N tubes: " + num2str(15.85/mflowprod));
-disp(max(ysoln(:,9)))
+%disp(max(ysoln(:,9)))
 plotdata(v, ysoln, conv);
-disp(ysoln(200,11))
+disp(ysoln(200,9))
 
 
