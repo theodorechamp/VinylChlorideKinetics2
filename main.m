@@ -64,6 +64,6 @@ disp("Kg flow product, 1 tube: " + num2str(mflowprod))
 disp("N tubes: " + num2str(15.85/mflowprod));
 disp(max(ysoln(:,9)))
 plotdata(v, ysoln, conv);
-%disp(ysoln(200,11))
+disp(ysoln(200,11))
 
 
