@@ -94,9 +94,9 @@ R = .0083144621; %m3 kPa K-1 mol-1
 rho = 0; % kg/m3
 
 for i = 1:length(nflow)
-    rho = rho + pp(i)*MW(i)/(T*R);
+    rho = rho + pp(i)*MW(i)/(T*R); 
 end
-
+%disp(rho)
 mflowTot = 0; % kg/hr
 for i = 1:length(MW)
     mflowTot = mflowTot + nflow(i)*MW(i);
