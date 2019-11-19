@@ -1,33 +1,55 @@
-% This file runs the script, ensuring the correct sequence of calling
-% functions
+% This file runs the script, and allows values to be inputted
+close all
+clear
+%Species indices key:
+    % 1 = c2h4
+    % 2 = hcl
+    % 3 = o2
+    % 4 = 1,1,2-trichloroethane
+    % 5 = co2
+    % 6 = cl2
+    % 7 = 1,2-dichloroethane
+    % 8 = h2o
 
 %%%%%%%%%%%%%%
 % Parameters %
 %%%%%%%%%%%%%%
-Tin = 523; % not the official value, will be adjusted to achieve outlet of 533 
+% Variables
+Tin = 471; % K 
 Pin = 1000; %kPa
-Htot = [-136.77, -119.87, -1410.08, 89.92]; %kJ/mol
-Cp = [2.32e4, 1.58e4, 3.94e4, 1.55e4, 1.74e4, 1.97e4, 4.28e4, 1.80e4]; % averaged over temp range
-Vr = 1.414; % m^3
-Lr = 3; % m
-nflowinit = [10,20,10,0,0,1.25,0,0]; % Same indices as pp
+Tcin = 303; %K
+D = .05; % m Using value from working solution
+Lr = 12; % m
+nflowinit = [.147 .432 .154 0 0 1.54e-8 0 0];
+%mols/sec
+
+% Set
+Vr = D^2*pi/4*Lr; % m^3
+numElements = 20; % number of solver iterations
+dV = Vr/numElements;
+MW = [0.02805, 0.03646, 0.01600, 0.1334, 0.04401, 0.0709, 0.09896, 0.01802]; %kg/mol
+Htot = [-240.14, -149.31, -1321.08, -116.82]; %kJ/mol
+Cp = [0.0538, 0.0292, 0.0304, 0.1050, 0.0418, 0.0351, 0.0937, 0.0345]; % averaged over temp range, kJ/mol K
 phi = .4;
-MW = [0.02805, 0.03646, 0.01600, 0.1334, 0.04401, 0.0709, 0.09896, 0.01802];%kg/mol
-numElements = 200;
+
 
 %%%%%%%%%
 % Logic %
-%%%%%%%%%
-vspan = linspace(0, Vr, numElements);
-
-y = zeros(numElements,10);
+%%%%%%%%% 
+y = zeros(numElements, 11);
+vspan = linspace(0,Vr,numElements);
 
 %Loading Dependent variables
-y(1,1:8) = nflowinit;
-y(1,9:10) = [Tin,Pin];
+y(1,:) = [nflowinit(1) nflowinit(2) nflowinit(3) nflowinit(4) nflowinit(5) nflowinit(6) nflowinit(7) nflowinit(8) Tin Pin Tcin];
+ysoln = euler1(y,phi, MW, Htot, Cp, dV, Vr, D, Lr);
 
 
-ysoln = euler1(y, phi, MW, Htot, Cp, (Vr/numElements), Vr);
-%plotdata();
+conv = zeros(numElements);
+for i = 1:numElements
+    conv(i) = (1-ysoln(i,1)/ysoln(1,1));
+end
+
+disp("Final Conversion: "+ num2str(conv(numElements)))
+plotdata(vspan, ysoln, conv);
 
 
