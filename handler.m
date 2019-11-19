@@ -1,5 +1,6 @@
-function outvar = handler(v, y, phi, MW, Htot, Cp, Lr, D)
+function outvar = handler(v, y, phi, MW, Htot, Cp, Lr, D, Beta0)
 
+nflow = [y(1),y(2),y(3),y(4),y(5),y(6),y(7),y(8)];
 T = y(9); %K
 P_t = y(10); %kPa
 Tc = y(11); %K
@@ -22,7 +23,7 @@ for i = 1:length(pp)
     pp(i) = molFracs(i) * P_t;
 end
 
-R = 8.3144621;
+RjmolK = 8.3144621; %J/mol K
 
 %Calculate rate constant for each reaction
 a1 = 10^4.2; a2 = 10^13.23; a3 = 10^6.78;  % a's are the pre-exponential factors from the Lakshmanan paper.
@@ -32,9 +33,9 @@ a1 = 10^4.2; a2 = 10^13.23; a3 = 10^6.78;  % a's are the pre-exponential factors
 E1 = -40100; E2 = -128080; E3 = -112000;
 
 %Calculate rate equations.
-k(1) = a1 * exp(E1/(R*T));
-k(2) = a2 * exp(E2/(R*T));
-k(3) = a3 * exp(E3/(R*T));
+k(1) = a1 * exp(E1/(RjmolK*T));
+k(2) = a2 * exp(E2/(RjmolK*T));
+k(3) = a3 * exp(E3/(RjmolK*T));
 k(4) = (1000 * exp(17.13 - 13000/(1.987*T))) / exp(5.4+16000/(1.987*T));
 %Rate constant units vary, see Lakshmanan paper for units
 
@@ -72,15 +73,18 @@ for i = 1:length(molFracs)
     term3 = term3 + y(i)*Cp(i); %Cp in kJ/mol K
 end
 
-outvar(9) = (term1 - term2) / term3; %K/m^3
+outvar(9) = (-term1 - term2) / term3; %K/m^3
 
-nflow = [y(1),y(2),y(3),y(4),y(5),y(6),y(7),y(8)];
-R = .0083144621; %m^3 kPa K-1 mol-1
+
+Rm3kpaKmol = .0083144621; %m^3 kPa K-1 mol-1
 rho = 0; % kg/m3 
 
-for i = 1:length(nflow)
-    rho = rho + pp(i)*MW(i)/(T*R); 
-end
+%Old method of density
+% for i = 1:length(nflow)
+%     rho = rho + pp(i)*MW(i)/(T*Rm3kpaKmol); 
+% end
+
+rho = Beta0*P_t/nflowTot/T;
 
 mflowTot = 0; % kg/s
 for i = 1:length(MW)
@@ -94,13 +98,12 @@ mu = 2.11*10^-5; %kg/(m*s) Values were averaged from Hysys simulation
 outvar(10) = - G0/Dp*1/Ac*((1-phi)/phi^3)*((150*(1-phi)*mu)/Dp + 1.75*G0)*1/rho;
 %outvar(10) = - 150/Ac*((1-phi)*mu/(Dp*G0)+(7/4))*((1-phi)/phi^3)*(G0^2/(rho*Dp))/1000; %kPa/m3 
 
-Fc = 1; %kg/s
+Fc = .001; %kg/s
 As = D * pi * Lr; %m2
 Do = D + 2*.0036; %m
 Cpc = ((Tc - 273) * .0029 + 1.5041 + 273)/1000; %kJ/kg K
 
 outvar(11) = 4 * U * (T - Tc) / (Fc * Cpc * Do); %Our old method
-%outvar(11) = pi()*Dp*mu*(Tc - T) / (Cpc * 
 
 outvar = outvar';
 

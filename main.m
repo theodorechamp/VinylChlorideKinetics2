@@ -17,9 +17,9 @@
 Tin = 471; % K 
 Pin = 1000; %kPa
 Tcin = 303; %K
-D = .0245; %m
-Lr = 12; % m
-nflowinit = [.0000089 .00040 .00005 0 0 .000001 0 0];
+D = .05; %m
+Lr = .005; % m
+nflowinit = [.147 .432 .154 0 0 1.5e-8 0 0]./90;
 
 
 % Set
@@ -35,14 +35,20 @@ phi = .4;
 % Logic %
 %%%%%%%%%
 vspan = linspace(0, Vr, numElements);
-disp(vspan)
 
 %Loading Dependent variables
 y0 = [nflowinit(1) nflowinit(2) nflowinit(3) nflowinit(4) nflowinit(5) nflowinit(6) nflowinit(7) nflowinit(8) Tin Pin Tcin];
 
-handleranon = @(v,y) handler(v,y,phi,MW,Htot,Cp,Lr,D);
+ntot = 0
+for i = 1:length(nflowinit)
+   ntot = ntot + nflowinit(i);
+end
+rho0 = 7.625; %kg/m^3
+Beta0 = ntot*Tin*rho0/Pin;
 
-[ v, ysoln ] = ode45(handleranon,vspan,y0);
+handleranon = @(v,y) handler(v,y,phi,MW,Htot,Cp,Lr,D,Beta0);
+
+[ v, ysoln ] = ode15s(handleranon,vspan,y0);
 conv = zeros(numElements);
 for i = 1:numElements
     conv(i) = (1-ysoln(i,1)/ysoln(1,1));
